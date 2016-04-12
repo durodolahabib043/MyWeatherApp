@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--    <LinearLayout
+            android:id="@+id/city_linearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>-->
+    <RelativeLayout
+        android:id="@+id/citytxt_rel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/citytxtview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="@string/cityname"
+            android:textSize="35sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/plus" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/time_rel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/citytxt_rel_layout">
+
+        <TextView
+            android:id="@+id/timeR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="@string/time"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_rel_layout">
+
+        <!-- <EditText
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             android:layout_marginTop="5dp"
+             android:hint="@string/enter_city"
+             android:paddingLeft="5sp"
+               android:background="#FFF"
+             android:paddingRight="5sp" />-->
+        <EditText
+            android:id="@+id/entercity"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:hint="@string/enter_city"
+            android:padding="2dp"
+            android:textSize="25sp" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/currentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="@string/currentTemp"
+        android:textSize="125sp" />
+
+
+</RelativeLayout>

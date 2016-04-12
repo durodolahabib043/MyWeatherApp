@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">AndroidWeather</string>
     <string name="action_settings">Settings</string>
+    <string name="cityname">cityname</string>
+    <string name="time">time</string>
+    <string name="enter_city">Enter your city</string>
+    <string name="currentTemp">10</string>
 </resources>
