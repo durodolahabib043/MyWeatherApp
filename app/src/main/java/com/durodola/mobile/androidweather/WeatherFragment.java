@@ -10,8 +10,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by mobile on 2016-04-12.
@@ -22,6 +27,14 @@ public class WeatherFragment extends AbstractWeatherFragment {
     private static String API_KEY = "f79974fabd0e9c2c9ae5301b0b059a14";
     private String urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=mumbai" + ",us&mode=json&appid=" + API_KEY;
     private static String TAG = "WeatherFragment";
+
+    // json
+    private static final String TEMP = "temp";
+    private static final String TEMP_MIN = "temp_min";
+    private static final String TEMP_MAX = "temp_max";
+    private static final String TAG_CONTRACTOR = "contractor";
+    private static final String TAG_LNG = "lng";
+    private static final String TAG_LAT = "lat";
 
 
     public WeatherFragment() {
@@ -48,6 +61,60 @@ public class WeatherFragment extends AbstractWeatherFragment {
         return view;
     }
 
+    // mathod to parse json
+    private void jsonParser(String in) {
+
+        JSONObject reader = null, row, main, weather, weather_main, weather_description;
+        JSONArray temp_array, weatherArray;
+        String temp, temp_min, temp_max, contractor, lng, lat;
+        // getCurrentLocation();
+
+        try {
+            reader = new JSONObject(in);
+            temp_array = reader.getJSONArray("list");
+            //JSONArray array = new JSONArray(in);
+            for (int i = 0; i < temp_array.length(); i++) {
+                row = temp_array.getJSONObject(i);
+                main = row.getJSONObject("main");
+
+
+                temp = main.getString("temp");
+                temp_min = main.getString("temp_min");
+                temp_max = main.getString("temp_max");
+                weatherArray = row.getJSONArray("weather");
+                for (int j = 0; j < weatherArray.length(); j++) {
+                    weather = weatherArray.getJSONObject(j);
+                    weather_main = weather.getJSONObject("main");
+                    weather_description = weather.getJSONObject("description");
+
+
+                }
+
+
+                HashMap<String, String> contact = new HashMap<String, String>();
+                contact.put(TEMP, temp);
+                contact.put(TEMP_MIN, temp_min);
+                contact.put(TEMP_MAX, temp_max);
+             /*   contact.put(TAG_CONTRACTOR, contractor);
+                contact.put(TAG_LAT, lat);
+                contact.put(TAG_LNG, lng);*/
+                // contact.get
+                Log.e(TAG, " " + temp);
+
+           /*     towList.add(contact);
+                completeList.add(contact);
+*/
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     private class DownloadTask extends AsyncTask<String, Integer, String> {
         String readStream;
 
@@ -69,35 +136,9 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.e(TAG, result);
-            // getCurrentLocation();
+            //  Log.e(TAG, result);
+            jsonParser(result);
 
-
-      /*      if (result == null) {
-                Log.e("result is null ", " result is null");
-            } else {
-                Log.d(" url string", result);
-                jsonParserr(result);
-                adapter = new RVAdapter(towList);
-                rv.setAdapter(adapter);
-
-                if (adapter != null) {
-                    adapter.SetOnItemCLickListener(new RVAdapter.MyItemClickListener() {
-                        @Override
-                        public void onItemClick(int position, View v) {
-
-                            Switchfragment(R.id.mylayout, mapFragment, Float.parseFloat(towList.get(position).get(TAG_LNG)),
-                                    Float.parseFloat(towList.get(position).get(TAG_LAT)), towList.get(position).get(TAG_NAME),
-                                    towList.get(position).get(TAG_CONTRACTOR), latitudeN, longitudeN, address);
-
-                        }
-                    });
-
-                }
-
-            }
-            progressbar.setVisibility(View.INVISIBLE);
-*/
         }
     }
 
