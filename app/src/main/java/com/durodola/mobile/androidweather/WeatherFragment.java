@@ -64,9 +64,9 @@ public class WeatherFragment extends AbstractWeatherFragment {
     // mathod to parse json
     private void jsonParser(String in) {
 
-        JSONObject reader = null, row, main, weather, weather_main, weather_description;
+        JSONObject reader = null, row, main, weather;
         JSONArray temp_array, weatherArray;
-        String temp, temp_min, temp_max, contractor, lng, lat;
+        String temp, temp_min, temp_max, weather_main, weather_description, contractor, lng, lat, dt, dt_txt;
         // getCurrentLocation();
 
         try {
@@ -75,20 +75,13 @@ public class WeatherFragment extends AbstractWeatherFragment {
             //JSONArray array = new JSONArray(in);
             for (int i = 0; i < temp_array.length(); i++) {
                 row = temp_array.getJSONObject(i);
+                dt = row.getString("dt");
                 main = row.getJSONObject("main");
 
 
                 temp = main.getString("temp");
                 temp_min = main.getString("temp_min");
                 temp_max = main.getString("temp_max");
-                weatherArray = row.getJSONArray("weather");
-                for (int j = 0; j < weatherArray.length(); j++) {
-                    weather = weatherArray.getJSONObject(j);
-                    weather_main = weather.getJSONObject("main");
-                    weather_description = weather.getJSONObject("description");
-
-
-                }
 
 
                 HashMap<String, String> contact = new HashMap<String, String>();
@@ -100,6 +93,20 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 contact.put(TAG_LNG, lng);*/
                 // contact.get
                 Log.e(TAG, " " + temp);
+
+                weatherArray = row.getJSONArray("weather");
+                for (int j = 0; j < weatherArray.length(); j++) {
+                    weather = weatherArray.getJSONObject(j);
+                    weather_main = weather.getString("main");
+                    weather_description = weather.getString("description");
+
+                    Log.e(TAG, "weather main  " + weather_description);
+
+
+                }
+                dt_txt = row.getString("dt_txt") ;
+                Log.e(TAG, " " + dt);
+                Log.e(TAG, " " + dt_txt);
 
            /*     towList.add(contact);
                 completeList.add(contact);

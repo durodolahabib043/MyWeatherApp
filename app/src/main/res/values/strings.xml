@@ -5,4 +5,10 @@
     <string name="time">time</string>
     <string name="enter_city">Enter your city</string>
     <string name="currentTemp">10</string>
+    <string name="wed">Wed</string>
+    <string name="row_temp">33</string>
+    <string name="haze">haze</string>
+    <string name="buttom_max_temp">30</string>
+    <string name="buttom_min_temp">28</string>
+
 </resources>
