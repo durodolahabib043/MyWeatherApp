@@ -53,93 +53,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
         return weatherArrayList.size();
     }
 
-/*
-    public void animateTo(ArrayList<HashMap<String, String>> models) {
-        applyAndAnimateRemovals(models);
-        applyAndAnimateAdditions(models);
-        applyAndAnimateMovedItems(models);
-    }
-
-
-    private void applyAndAnimateRemovals(ArrayList<HashMap<String, String>> newModels) {
-        for (int i = weatherArrayList.size() - 1; i >= 0; i--) {
-            final HashMap<String, String> model = weatherArrayList.get(i);
-            if (!newModels.contains(model)) {
-                removeItem(i);
-            }
-        }
-    }
-
-    private void applyAndAnimateAdditions(ArrayList<HashMap<String, String>> newModels) {
-        for (int i = 0, count = newModels.size(); i < count; i++) {
-            final HashMap<String, String> model = newModels.get(i);
-            if (!weatherArrayList.contains(model)) {
-                addItem(i, model);
-            }
-        }
-    }
-
-    private void applyAndAnimateMovedItems(ArrayList<HashMap<String, String>> newModels) {
-        for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
-            final HashMap<String, String> model = newModels.get(toPosition);
-            final int fromPosition = weatherArrayList.indexOf(model);
-            if (fromPosition >= 0 && fromPosition != toPosition) {
-                moveItem(fromPosition, toPosition);
-            }
-        }
-    }
-
-    public HashMap<String, String> removeItem(int position) {
-        final HashMap<String, String> model = weatherArrayList.remove(position);
-        notifyItemRemoved(position);
-        return model;
-    }
-
-    public void addItem(int position, HashMap<String, String> model) {
-        weatherArrayList.add(position, model);
-        notifyItemInserted(position);
-
-    }
-
-    public void moveItem(int fromPosition, int toPosition) {
-        final HashMap<String, String> model = weatherArrayList.remove(fromPosition);
-        weatherArrayList.add(toPosition, model);
-        notifyItemMoved(fromPosition, toPosition);
-
-    }
-*/
-
-
-/*
-    public interface MyItemClickListener {
-        public void onItemClick(int position, View v);
-
-    }
-
-    public ArrayList<HashMap<String, String>> filter(ArrayList<HashMap<String, String>> models, ArrayList<HashMap<String, String>> completeList, String query) {
-        query = query.toLowerCase(Locale.getDefault());
-        final ArrayList<HashMap<String, String>> filteredModelList = new ArrayList<HashMap<String, String>>();
-
-
-        if (query.length() == 0) {
-            filteredModelList.clear();
-
-            filteredModelList.addAll(completeList);
-
-        } else {
-            for (int i = 0, l = models.size(); i < l; i++) {
-                final HashMap<String, String> p = models.get(i);
-                if (p.toString().toLowerCase().contains(query))
-                    filteredModelList.add(p);
-
-            }
-        }
-        notifyDataSetChanged();
-
-        return filteredModelList;
-    }
-*/
-
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -155,21 +68,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
             weatherIcom = (ImageView) itemView.findViewById(R.id.icon_row);
 
         }
-/*
-        @Override
-        public void onClick(View v) {
-            if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(getAdapterPosition(), v);
-
-            }
-
-        }
-
-    }
-
-    public void SetOnItemCLickListener(MyItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
-    }*/
 
 
     }
