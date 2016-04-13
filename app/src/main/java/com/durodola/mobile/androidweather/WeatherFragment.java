@@ -130,7 +130,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 Log.e(TAG, " temp" + temp_double);
                 Log.e(TAG, " dt" + dt);
                 Log.e(TAG, " dt_txt" + dt_txt);
-                contact.put(TEMP, Double.toString(temp_celcius));
+                contact.put(TEMP, Double.toString(Math.round(temp_celcius)));
                 contact.put(TEMP_MIN, temp_min);
                 contact.put(TEMP_MAX, temp_max);
                 contact.put(DT, dt);

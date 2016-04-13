@@ -10,7 +10,7 @@
         android:id="@+id/cv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardBackgroundColor="@android:color/transparent"
         card_view:cardElevation="1dp"
         card_view:cardUseCompatPadding="true">
 
@@ -26,7 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="@string/wed" />
+                android:text="@string/wed"
+                android:textColor="@color/colorWhite" />
 
             <ImageView
                 android:id="@+id/icon_row"
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/icon_row"
                 android:layout_centerHorizontal="true"
-                android:text="@string/row_temp" />
+                android:text="@string/row_temp"
+                android:textColor="@color/colorWhite" />
 
 
         </RelativeLayout>

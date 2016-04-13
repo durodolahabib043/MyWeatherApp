@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <!--    <LinearLayout
@@ -22,6 +23,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:text="@string/cityname"
+            android:textColor="@color/colorWhite"
             android:textSize="35sp" />
 
         <ImageView
@@ -47,6 +49,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:text="@string/time"
+            android:textColor="@color/colorWhite"
             android:textSize="25sp" />
 
     </RelativeLayout>
@@ -118,6 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/haze"
+                android:textColor="@color/colorWhite"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -137,7 +141,8 @@
                 android:id="@+id/buttom_max_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/buttom_max_temp" />
+                android:text="@string/buttom_max_temp"
+                android:textColor="@color/colorWhite" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -148,7 +153,8 @@
                 android:id="@+id/buttom_min_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/buttom_min_temp" />
+                android:text="@string/buttom_min_temp"
+                android:textColor="@color/colorWhite" />
 
 
         </LinearLayout>
@@ -159,6 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/sec_llyaout"
             android:text="@string/currentTemp"
+            android:textColor="@color/colorWhite"
             android:textSize="100sp" />
 
 
