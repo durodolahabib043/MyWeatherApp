@@ -21,6 +21,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
 
     ArrayList<HashMap<String, String>> weatherArrayList;
     Context context;
+    Weather weather;
     // private static MyItemClickListener mItemClickListener;
 
 
@@ -36,20 +37,15 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
     public PersonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_row_layout, parent, false);
         PersonViewHolder pvh = new PersonViewHolder(v);
+        weather = Weather.getInstance();
         return pvh;
     }
 
     @Override
     public void onBindViewHolder(PersonViewHolder holder, int position) {
-        holder.weekdays.setText(weatherArrayList.get(position).get("dt_txt"));
-        holder.weekdaysTemp.setText(weatherArrayList.get(position).get("temp"));
-
-        //
-        //  holder.weatherIcom.setImageResource(Integer.parseInt(weatherArrayList.get(position).get("icon")));
-        Picasso.with(this.context).load("http://openweathermap.org/img/w/" + weatherArrayList.get(position).get("icon") + ".png").into(holder.weatherIcom);
-        // Picasso.with(c).load(url).fit().into(imageView);
-
-
+        holder.weekdays.setText(weatherArrayList.get(position).get(weather.getDt_txt()));
+        holder.weekdaysTemp.setText(weatherArrayList.get(position).get(weather.getTemp()));
+        Picasso.with(this.context).load("http://openweathermap.org/img/w/" + weatherArrayList.get(position).get(weather.getIcon()) + ".png").into(holder.weatherIcom);
     }
 
     @Override

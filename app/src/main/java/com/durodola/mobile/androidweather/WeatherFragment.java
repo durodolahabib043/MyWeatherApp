@@ -20,38 +20,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mobile on 2016-04-12.
  */
 public class WeatherFragment extends AbstractWeatherFragment {
-    TextView cityName, cityTime, currentTime;
+    TextView cityName, cityTime, currentTime, maxTemp, minTemp, weatherDescription;
     EditText enterCity;
     private static String API_KEY = "f79974fabd0e9c2c9ae5301b0b059a14";
     private String urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=toronto" + ",ca&mode=json&appid=" + API_KEY;
     private static String TAG = "WeatherFragment";
-
-    // json
-    private static final String TEMP = "temp";
-    private static final String TEMP_MIN = "temp_min";
-    private static final String TEMP_MAX = "temp_max";
-    private static final String DT = "dt";
-    private static final String DT_TXT = "dt_txt";
-    private static final String ICON = "icon";
-    private static final String TAG_CONTRACTOR = "contractor";
-    private static final String TAG_LNG = "lng";
-    private static final String TAG_LAT = "lat";
-
-    //
     LinearLayoutManager llm;
-
     RecyclerView rv;
     // myList.setLayoutManager(layoutManager);
     ArrayList<HashMap<String, String>> weatherArrayList;
-
-
     // adapter
     WeatherAdapter weatherAdapter;
+    // map
+    Map.Entry<String, String> entry;
+    String key, value;
+    HashMap<String, String> contact;
+    Weather weatherObj;
+    double valueMax, valueMin = 0;
 
 
     public WeatherFragment() {
@@ -69,9 +60,13 @@ public class WeatherFragment extends AbstractWeatherFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.weather_fragment, container, false);
+        weatherObj = Weather.getInstance();
         cityName = (TextView) view.findViewById(R.id.citytxtview);
         cityTime = (TextView) view.findViewById(R.id.timeR);
         currentTime = (TextView) view.findViewById(R.id.currentTime);
+        maxTemp = (TextView) view.findViewById(R.id.buttom_max_temp);
+        minTemp = (TextView) view.findViewById(R.id.buttom_min_temp);
+        weatherDescription = (TextView) view.findViewById(R.id.button_haze);
         enterCity = (EditText) view.findViewById(R.id.entercity);
         weatherArrayList = new ArrayList<HashMap<String, String>>();
         llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -79,11 +74,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
         new DownloadTask().execute();
-        //picasso
-    /*    Picasso.with(this)
-                .load("YOUR IMAGE URL HERE")
-                .into(imageView);
-*/
+
         return view;
     }
 
@@ -93,9 +84,8 @@ public class WeatherFragment extends AbstractWeatherFragment {
         JSONObject reader = null, row, main, weather;
         double temp_double = 273.15;
         JSONArray temp_array, weatherArray;
-        String temp, temp_min, temp_max, icon = null, weather_main, weather_description, contractor, lng, lat, dt, dt_txt;
-        // getCurrentLocation();
-
+        double temp_celcius = 0;
+        String temp = null, temp_min, temp_max, icon = null, weather_main = null, weather_description = null, contractor, lng, lat, dt, dt_txt;
 
         try {
             reader = new JSONObject(in);
@@ -103,22 +93,15 @@ public class WeatherFragment extends AbstractWeatherFragment {
             //JSONArray array = new JSONArray(in);
             for (int i = 0; i < temp_array.length(); i++) {
                 row = temp_array.getJSONObject(i);
-                dt = row.getString("dt");
-                main = row.getJSONObject("main");
+                dt = row.getString(weatherObj.getDt());
+                main = row.getJSONObject(weatherObj.getMain());
+                temp = main.getString(weatherObj.getTemp());
+                temp_celcius = Double.parseDouble(temp) - temp_double;
 
+                temp_min = main.getString(weatherObj.getTemp_min());
+                temp_max = main.getString(weatherObj.getTemp_max());
+                contact = new HashMap<String, String>();
 
-                temp = main.getString("temp");
-                double temp_celcius = Double.parseDouble(temp) - temp_double;
-
-                temp_min = main.getString("temp_min");
-                temp_max = main.getString("temp_max");
-
-
-                HashMap<String, String> contact = new HashMap<String, String>();
-
-             /*   contact.put(TAG_CONTRACTOR, contractor);
-                contact.put(TAG_LAT, lat);
-                contact.put(TAG_LNG, lng);*/
                 // contact.get
                 Log.e(TAG, " " + temp);
 
@@ -128,28 +111,38 @@ public class WeatherFragment extends AbstractWeatherFragment {
                     weather_main = weather.getString("main");
                     weather_description = weather.getString("description");
                     icon = weather.getString("icon");
-
                     Log.e(TAG, "weather main  " + weather_description + " icon" + icon);
 
 
                 }
                 dt_txt = row.getString("dt_txt");
-                Log.e(TAG, " temp" + temp_double);
-                Log.e(TAG, " dt" + dt);
-                Log.e(TAG, " dt_txt" + dt_txt);
-                contact.put(TEMP, Double.toString(Math.round(temp_celcius)));
-                contact.put(TEMP_MIN, temp_min);
-                contact.put(TEMP_MAX, temp_max);
-                contact.put(DT, dt);
-                contact.put(ICON, icon);
-                contact.put(DT_TXT, weekdayConverter(dt_txt));
+
+
+                contact.put(weatherObj.getTemp_min(), temp_min);
+                contact.put(weatherObj.getTemp_max(), temp_max);
+                contact.put(weatherObj.getMain(), weather_main);
+                contact.put(weatherObj.getDescription(), weather_description);
+                contact.put(weatherObj.getDt(), dt);
+                contact.put(weatherObj.getIcon(), icon);
+                contact.put(weatherObj.getDt_txt(), weekdayConverter(dt_txt));
+                contact.put(weatherObj.getTemp(), Double.toString(Math.round(temp_celcius)));
+
+                entry = contact.entrySet().iterator().next();
+                key = entry.getKey();
+                value = entry.getValue();
                 weatherArrayList.add(contact);
 
-           /*     towList.add(contact);
-                completeList.add(contact);
-*/
             }
-
+            // refactor
+            valueMax = Double.parseDouble(weatherArrayList.get(0).get(weatherObj.getTemp_max()));
+            valueMin = Double.parseDouble(weatherArrayList.get(0).get(weatherObj.getTemp_min()));
+            double maxTempCelcius = valueMax - temp_double;
+            double minTempCelius = valueMin - temp_double;
+            currentTime.setText(weatherArrayList.get(0).get(weatherObj.getTemp()));
+            maxTemp.setText(Double.toString(Math.round(maxTempCelcius)));
+            minTemp.setText(Double.toString(Math.round(minTempCelius)));
+            weatherDescription.setText(weatherArrayList.get(0).get(weatherObj.getDescription()));
+            Log.e(TAG, " " + maxTempCelcius);
 
         } catch (JSONException e) {
             e.printStackTrace();
