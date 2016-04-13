@@ -37,6 +37,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     private static final String TEMP_MAX = "temp_max";
     private static final String DT = "dt";
     private static final String DT_TXT = "dt_txt";
+    private static final String ICON = "icon";
     private static final String TAG_CONTRACTOR = "contractor";
     private static final String TAG_LNG = "lng";
     private static final String TAG_LAT = "lat";
@@ -78,7 +79,11 @@ public class WeatherFragment extends AbstractWeatherFragment {
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
         new DownloadTask().execute();
-
+        //picasso
+    /*    Picasso.with(this)
+                .load("YOUR IMAGE URL HERE")
+                .into(imageView);
+*/
         return view;
     }
 
@@ -88,8 +93,9 @@ public class WeatherFragment extends AbstractWeatherFragment {
         JSONObject reader = null, row, main, weather;
         double temp_double = 273.15;
         JSONArray temp_array, weatherArray;
-        String temp, temp_min, temp_max, weather_main, weather_description, contractor, lng, lat, dt, dt_txt;
+        String temp, temp_min, temp_max, icon = null, weather_main, weather_description, contractor, lng, lat, dt, dt_txt;
         // getCurrentLocation();
+
 
         try {
             reader = new JSONObject(in);
@@ -121,8 +127,9 @@ public class WeatherFragment extends AbstractWeatherFragment {
                     weather = weatherArray.getJSONObject(j);
                     weather_main = weather.getString("main");
                     weather_description = weather.getString("description");
+                    icon = weather.getString("icon");
 
-                    Log.e(TAG, "weather main  " + weather_description);
+                    Log.e(TAG, "weather main  " + weather_description + " icon" + icon);
 
 
                 }
@@ -134,6 +141,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 contact.put(TEMP_MIN, temp_min);
                 contact.put(TEMP_MAX, temp_max);
                 contact.put(DT, dt);
+                contact.put(ICON, icon);
                 contact.put(DT_TXT, weekdayConverter(dt_txt));
                 weatherArrayList.add(contact);
 
@@ -178,7 +186,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
             } else {
                 jsonParser(result);
-                weatherAdapter = new WeatherAdapter(weatherArrayList);
+                weatherAdapter = new WeatherAdapter(getContext(), weatherArrayList);
                 rv.setAdapter(weatherAdapter);
 
 
