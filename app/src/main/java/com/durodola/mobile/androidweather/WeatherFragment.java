@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by mobile on 2016-04-12.
@@ -28,7 +32,9 @@ import java.util.Map;
 public class WeatherFragment extends AbstractWeatherFragment {
     TextView cityName, cityTime, currentTime, maxTemp, minTemp, weatherDescription;
     EditText enterCity;
+    ImageView iconH;
     private static String API_KEY = "f79974fabd0e9c2c9ae5301b0b059a14";
+    private static String BASE_URL = "http://openweathermap.org/img/w/";
     private String urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=toronto" + ",ca&mode=json&appid=" + API_KEY;
     private static String TAG = "WeatherFragment";
     LinearLayoutManager llm;
@@ -43,7 +49,8 @@ public class WeatherFragment extends AbstractWeatherFragment {
     HashMap<String, String> contact;
     Weather weatherObj;
     double valueMax, valueMin = 0;
-
+    private Integer[] mThumbIds;
+    Random random;
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -68,11 +75,16 @@ public class WeatherFragment extends AbstractWeatherFragment {
         minTemp = (TextView) view.findViewById(R.id.buttom_min_temp);
         weatherDescription = (TextView) view.findViewById(R.id.button_haze);
         enterCity = (EditText) view.findViewById(R.id.entercity);
+        iconH = (ImageView) view.findViewById(R.id.button_icon);
         weatherArrayList = new ArrayList<HashMap<String, String>>();
         llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rv = (RecyclerView) view.findViewById(R.id.rv);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
+        // change back ground
+        mThumbIds = new Integer[]{R.drawable.clearbg, R.drawable.background,
+                R.drawable.cloudbg, R.drawable.dayclear, R.drawable.tropical};
+        random = new Random();
         new DownloadTask().execute();
 
         return view;
@@ -138,11 +150,18 @@ public class WeatherFragment extends AbstractWeatherFragment {
             valueMin = Double.parseDouble(weatherArrayList.get(0).get(weatherObj.getTemp_min()));
             double maxTempCelcius = valueMax - temp_double;
             double minTempCelius = valueMin - temp_double;
-            currentTime.setText(weatherArrayList.get(0).get(weatherObj.getTemp()));
+            // Double.valueOf(s).intValue();
+            currentTime.setText(Double.valueOf(weatherArrayList.get(0).get(weatherObj.getTemp())).intValue() + "C");
+
             maxTemp.setText(Double.toString(Math.round(maxTempCelcius)));
             minTemp.setText(Double.toString(Math.round(minTempCelius)));
             weatherDescription.setText(weatherArrayList.get(0).get(weatherObj.getDescription()));
+            Picasso.with(this.getContext()).load(BASE_URL + weatherArrayList.get(0).get(weatherObj.getIcon()) + ".png").into(iconH);
             Log.e(TAG, " " + maxTempCelcius);
+
+            for (int i = 0; i <= 4; i++) {
+                WeatherFragment.this.getView().setBackgroundResource(mThumbIds[random.nextInt(4 - 0 + 1) + 0]);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -150,7 +169,6 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
 
     }
-
 
     private class DownloadTask extends AsyncTask<String, Integer, String> {
         String readStream;
