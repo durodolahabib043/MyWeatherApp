@@ -6,11 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -33,9 +36,11 @@ public class WeatherFragment extends AbstractWeatherFragment {
     TextView cityName, cityTime, currentTime, maxTemp, minTemp, weatherDescription;
     EditText enterCity;
     ImageView iconH;
-    private static String API_KEY = "f79974fabd0e9c2c9ae5301b0b059a14";
+    // i used virgin mail and olawepo as username
+    private static String API_KEY = "4e0587d5eaf712ce4a3c358a79d7e591";
     private static String BASE_URL = "http://openweathermap.org/img/w/";
-    private String urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=toronto" + ",ca&mode=json&appid=" + API_KEY;
+    private String urlLink;
+    String test_link = "http://api.openweathermap.org/data/2.5/forecast?q=ibadan,ca&mode=json&appid=4e0587d5eaf712ce4a3c358a79d7e591";
     private static String TAG = "WeatherFragment";
     LinearLayoutManager llm;
     RecyclerView rv;
@@ -43,6 +48,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     ArrayList<HashMap<String, String>> weatherArrayList;
     // adapter
     WeatherAdapter weatherAdapter;
+    ProgressBar progressbar;
     // map
     Map.Entry<String, String> entry;
     String key, value;
@@ -66,7 +72,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.weather_fragment, container, false);
+        final View view = inflater.inflate(R.layout.weather_fragment, container, false);
         weatherObj = Weather.getInstance();
         cityName = (TextView) view.findViewById(R.id.citytxtview);
         cityTime = (TextView) view.findViewById(R.id.timeR);
@@ -75,6 +81,47 @@ public class WeatherFragment extends AbstractWeatherFragment {
         minTemp = (TextView) view.findViewById(R.id.buttom_min_temp);
         weatherDescription = (TextView) view.findViewById(R.id.button_haze);
         enterCity = (EditText) view.findViewById(R.id.entercity);
+
+       // new DownloadTask().execute(test_link);
+        // test api call
+     /*   weatherDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //contact.clear();
+                contact.clear();
+                weatherArrayList.clear();
+                urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=" + enterCity.getText().toString() + ",ca&mode=json&appid=" + API_KEY;
+
+                showSpinner(progressbar);
+                new DownloadTask().execute(urlLink);
+                cityName.setText(enterCity.getText().toString());
+
+                hideKeyBoard(view);
+
+            }
+        });*/
+
+        progressbar = (ProgressBar) view.findViewById(R.id.progressbar1);
+        enterCity.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    contact.clear();
+                    weatherArrayList.clear();
+                    urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=" + enterCity.getText().toString() + ",ca&mode=json&appid=" + API_KEY;
+                    showSpinner(progressbar);
+                    new DownloadTask().execute(urlLink);
+                    cityName.setText(enterCity.getText().toString().toUpperCase());
+                    enterCity.setText("");
+
+                    hideKeyBoard(view);
+                    return true;
+                }
+                return false;
+            }
+        });
+        //  hideSoftKeyboard();
+
         iconH = (ImageView) view.findViewById(R.id.button_icon);
         weatherArrayList = new ArrayList<HashMap<String, String>>();
         llm = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -85,12 +132,9 @@ public class WeatherFragment extends AbstractWeatherFragment {
         mThumbIds = new Integer[]{R.drawable.clearbg, R.drawable.background,
                 R.drawable.cloudbg, R.drawable.dayclear, R.drawable.tropical};
         random = new Random();
-        new DownloadTask().execute();
-
         return view;
     }
 
-    // mathod to parse json
     private void jsonParser(String in) {
 
         JSONObject reader = null, row, main, weather;
@@ -98,6 +142,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
         JSONArray temp_array, weatherArray;
         double temp_celcius = 0;
         String temp = null, temp_min, temp_max, icon = null, weather_main = null, weather_description = null, contractor, lng, lat, dt, dt_txt;
+
 
         try {
             reader = new JSONObject(in);
@@ -112,7 +157,6 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
                 temp_min = main.getString(weatherObj.getTemp_min());
                 temp_max = main.getString(weatherObj.getTemp_max());
-                contact = new HashMap<String, String>();
 
                 // contact.get
                 Log.e(TAG, " " + temp);
@@ -128,6 +172,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
                 }
                 dt_txt = row.getString("dt_txt");
+                contact = new HashMap<String, String>();
 
 
                 contact.put(weatherObj.getTemp_min(), temp_min);
@@ -140,10 +185,10 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 contact.put(weatherObj.getTemp(), Double.toString(Math.round(temp_celcius)));
 
                 entry = contact.entrySet().iterator().next();
-                key = entry.getKey();
-                value = entry.getValue();
+                Log.e(" value ", "2@@@@@@@@@@@@@@@@@@@@@@@ ");
+                Log.e(" value ", " " + contact);
+                Log.e(" value ", "2@@@@@@@@@@@@@@@@@@@@@@@ ");
                 weatherArrayList.add(contact);
-
             }
             // refactor
             valueMax = Double.parseDouble(weatherArrayList.get(0).get(weatherObj.getTemp_max()));
@@ -167,18 +212,21 @@ public class WeatherFragment extends AbstractWeatherFragment {
             e.printStackTrace();
         }
 
-
+        //    contact.clear();
     }
 
     private class DownloadTask extends AsyncTask<String, Integer, String> {
         String readStream;
 
+
         @Override
         protected String doInBackground(String... url) {
-            //progressbar.setVisibility(View.VISIBLE);
+            //    progressbar.setVisibility(View.VISIBLE);
+            // progressBar.setVisibility(View.VISIBLE);
 
             try {
-                URL url1 = new URL(urlLink);
+                //  progressbar.setVisibility(View.VISIBLE);
+                URL url1 = new URL(url[0]);
                 HttpURLConnection con = (HttpURLConnection) url1.openConnection();
                 readStream = readStream(con.getInputStream());
                 // Give output for the command line
@@ -192,16 +240,20 @@ public class WeatherFragment extends AbstractWeatherFragment {
         @Override
         protected void onPostExecute(String result) {
             //  Log.e(TAG, result);
+
             if (result.equalsIgnoreCase("null")) {
                 Log.e(TAG, " download did not happend");
 
             } else {
                 jsonParser(result);
+
+
                 weatherAdapter = new WeatherAdapter(getContext(), weatherArrayList);
                 rv.setAdapter(weatherAdapter);
 
 
             }
+            progressbar.setVisibility(View.INVISIBLE);
 
 
         }

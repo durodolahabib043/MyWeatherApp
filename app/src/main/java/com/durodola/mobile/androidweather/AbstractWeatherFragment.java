@@ -1,6 +1,12 @@
 package com.durodola.mobile.androidweather;
 
+import android.content.Context;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +35,19 @@ public class AbstractWeatherFragment extends Fragment {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    protected void hideKeyBoard(View view) {
+        // View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    protected void hideSoftKeyboard() {
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     protected String weekdayConverter(String dt_txt) {
@@ -67,6 +86,21 @@ public class AbstractWeatherFragment extends Fragment {
 
         System.out.println(finalDay.substring(0, 3));
         return finalDay.substring(0, 3);
+
+    }
+
+    protected void showSpinner(final ProgressBar progressBar) {
+        final Handler handler = new Handler();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+                handler.postDelayed(this, 4000);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        };
+
+        handler.postDelayed(r, 1000);
 
     }
 
