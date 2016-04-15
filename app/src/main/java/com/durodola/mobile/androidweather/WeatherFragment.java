@@ -71,6 +71,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     float longitudeN;
     String urlLink2;
 
+
     public WeatherFragment() {
         // Required empty public constructor
     }
@@ -153,7 +154,13 @@ public class WeatherFragment extends AbstractWeatherFragment {
         mThumbIds = new Integer[]{R.drawable.clearbg, R.drawable.background,
                 R.drawable.cloudbg, R.drawable.dayclear, R.drawable.tropical};
         random = new Random();
-        new DownloadTask().execute(urlLink2);
+        if (isConnected() == true) {
+
+            new DownloadTask().execute(urlLink2);
+        } else {
+            noNetworkAlert();
+
+        }
 
 
         return view;
@@ -288,11 +295,19 @@ public class WeatherFragment extends AbstractWeatherFragment {
     private class DownloadTask extends AsyncTask<String, Integer, String> {
         String readStream;
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // showDialog(DIALOG_DOWNLOAD_PROGRESS);
+            progressbar.setVisibility(View.VISIBLE);
+        }
+
 
         @Override
         protected String doInBackground(String... url) {
             //    progressbar.setVisibility(View.VISIBLE);
             // progressBar.setVisibility(View.VISIBLE);
+            //  getCurrentLocation();
 
             try {
                 //  progressbar.setVisibility(View.VISIBLE);
@@ -316,6 +331,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 result = "empty string";
                 Log.e(TAG, result);
             } else {
+                //  getCurrentLocation();
                 jsonParser(result);
 
 
