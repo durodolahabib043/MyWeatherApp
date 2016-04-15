@@ -69,6 +69,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     String address = "";
     float latitudeN;
     float longitudeN;
+    String urlLink2;
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -152,6 +153,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
         mThumbIds = new Integer[]{R.drawable.clearbg, R.drawable.background,
                 R.drawable.cloudbg, R.drawable.dayclear, R.drawable.tropical};
         random = new Random();
+        new DownloadTask().execute(urlLink2);
 
 
         return view;
@@ -238,6 +240,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     }
 
     private void getCurrentLocation() {
+        String city = null;
         if (mGPSService.isLocationAvailable == false) {
 
             // Here you can ask the user to try again, using return; for that
@@ -262,11 +265,15 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 addresses = geocoder.getFromLocation(latitudeN, longitudeN, 1);
                 Log.e("address", " " + " " + addresses);
 
-                String city = addresses.get(0).getSubLocality();
+                city = addresses.get(0).getSubLocality();
                 Log.e("city", " " + city);
+                urlLink2 = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",ca&mode=json&appid=" + API_KEY;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+            //
 
 
             //  address = mGPSService.getLocationAddress();
@@ -304,9 +311,10 @@ public class WeatherFragment extends AbstractWeatherFragment {
         protected void onPostExecute(String result) {
             //  Log.e(TAG, result);
 
-            if (result.equalsIgnoreCase("null")) {
-                Log.e(TAG, " download did not happend");
 
+            if (result == null) {
+                result = "empty string";
+                Log.e(TAG, result);
             } else {
                 jsonParser(result);
 
