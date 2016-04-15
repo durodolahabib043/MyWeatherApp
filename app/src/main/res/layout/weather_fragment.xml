@@ -4,16 +4,69 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical">
+    <!--
+
+        <FrameLayout
+            android:id="@+id/edittext_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            &lt;!&ndash; <EditText
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+
+                 android:layout_marginTop="5dp"
+                 android:hint="@string/enter_city"
+                 android:paddingLeft="5sp"
+                   android:background="#FFF"
+                 android:paddingRight="5sp" />&ndash;&gt;
+            <EditText
+                android:id="@+id/entercity"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_city"
+                android:imeOptions="actionDone"
+                android:padding="2dp"
+                android:singleLine="true"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="25sp"
+                android:visibility="gone" />
+            &lt;!&ndash;  ndroid:background="@drawable/testing_gradient"&ndash;&gt;
+
+
+        </FrameLayout>
+    -->
+
+    <FrameLayout
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/testText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="@string/time"
+            android:textSize="25sp"
+            android:visibility="invisible" />
+
+    </FrameLayout>
 
     <!--    <LinearLayout
             android:id="@+id/city_linearlayout"
-            android:layout_width="wrap_content"
+            androidFrameLayout
+  "wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"></LinearLayout>-->
     <RelativeLayout
         android:id="@+id/citytxt_rel_layout"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content">
 
         <TextView
@@ -28,6 +81,7 @@
             android:textStyle="italic" />
 
         <ImageView
+            android:id="@+id/addimage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -56,43 +110,46 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/edittext_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/time_rel_layout">
+    <!--    <RelativeLayout
+            android:id="@+id/edittext_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_rel_layout">
 
-        <!-- <EditText
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
+            &lt;!&ndash; <EditText
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
 
-             android:layout_marginTop="5dp"
-             android:hint="@string/enter_city"
-             android:paddingLeft="5sp"
-               android:background="#FFF"
-             android:paddingRight="5sp" />-->
-        <EditText
-            android:id="@+id/entercity"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:hint="@string/enter_city"
-            android:imeOptions="actionDone"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:padding="2dp"
-            android:singleLine="true"
-            android:textSize="25sp" />
+                 android:layout_marginTop="5dp"
+                 android:hint="@string/enter_city"
+                 android:paddingLeft="5sp"
+                   android:background="#FFF"
+                 android:paddingRight="5sp" />&ndash;&gt;
+            <EditText
+                android:id="@+id/entercity"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_city"
+                android:imeOptions="actionDone"
+                android:padding="2dp"
+                android:singleLine="true"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="25sp"
+                android:visibility="invisible" />
+            &lt;!&ndash;  ndroid:background="@drawable/testing_gradient"&ndash;&gt;
 
 
-    </RelativeLayout>
+        </RelativeLayout>-->
 
     <FrameLayout
         android:id="@+id/progressFral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edittext_layout"
-        android:layout_centerInParent="true">
+        android:layout_below="@id/citytxt_rel_layout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp">
 
         <ProgressBar
             android:id="@+id/progressbar1"

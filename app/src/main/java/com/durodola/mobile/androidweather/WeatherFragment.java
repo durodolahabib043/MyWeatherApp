@@ -8,11 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,10 +38,10 @@ import java.util.Random;
 /**
  * Created by mobile on 2016-04-12.
  */
-public class WeatherFragment extends AbstractWeatherFragment {
+public class WeatherFragment extends AbstractWeatherFragment implements Animation.AnimationListener {
     TextView cityName, cityTime, currentTime, maxTemp, minTemp, weatherDescription;
-    EditText enterCity;
-    ImageView iconH;
+    EditText enterCity, testTxt;
+    ImageView iconH, addImage;
     // i used virgin mail and olawepo as username
     private static String API_KEY = "4e0587d5eaf712ce4a3c358a79d7e591";
     private static String BASE_URL = "http://openweathermap.org/img/w/";
@@ -70,6 +70,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
     float latitudeN;
     float longitudeN;
     String urlLink2;
+    Animation animMove;
 
 
     public WeatherFragment() {
@@ -93,34 +94,32 @@ public class WeatherFragment extends AbstractWeatherFragment {
         currentTime = (TextView) view.findViewById(R.id.currentTime);
         maxTemp = (TextView) view.findViewById(R.id.buttom_max_temp);
         minTemp = (TextView) view.findViewById(R.id.buttom_min_temp);
+        testTxt = (EditText) view.findViewById(R.id.testText);
+        // enterCity = (EditText) view.findViewById(R.id.entercity);
         weatherDescription = (TextView) view.findViewById(R.id.button_haze);
-        enterCity = (EditText) view.findViewById(R.id.entercity);
+        addImage = (ImageView) view.findViewById(R.id.addimage);
+        // load the animation
+        animMove = AnimationUtils.loadAnimation(getContext(),
+                R.anim.move);
+
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+          /*      enterCity.setVisibility(View.VISIBLE);
+                enterCity.setFocusable(true);
+                enterCity.setClickable(true);*/
+              //  testTxt.setVisibility(View.VISIBLE);
+                testTxt.startAnimation(animMove);
+            }
+        });
+
+
         mGPSService = new GPSService(getContext());
         mGPSService.getLocation();
         getCurrentLocation();
 
-
-        // new DownloadTask().execute(test_link);
-        // test api call
-     /*   weatherDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //contact.clear();
-                contact.clear();
-                weatherArrayList.clear();
-                urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=" + enterCity.getText().toString() + ",ca&mode=json&appid=" + API_KEY;
-
-                showSpinner(progressbar);
-                new DownloadTask().execute(urlLink);
-                cityName.setText(enterCity.getText().toString());
-
-                hideKeyBoard(view);
-
-            }
-        });*/
-
         progressbar = (ProgressBar) view.findViewById(R.id.progressbar1);
-        enterCity.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+/*        enterCity.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -141,7 +140,7 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 }
                 return false;
             }
-        });
+        });*/
         //  hideSoftKeyboard();
 
         iconH = (ImageView) view.findViewById(R.id.button_icon);
@@ -289,6 +288,22 @@ public class WeatherFragment extends AbstractWeatherFragment {
 
         }
 
+
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        testTxt.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
 
     }
 
