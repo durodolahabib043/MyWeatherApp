@@ -1,5 +1,7 @@
 package com.durodola.mobile.androidweather;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,10 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -58,6 +64,12 @@ public class WeatherFragment extends AbstractWeatherFragment {
     private Integer[] mThumbIds;
     Random random;
 
+    /// get current  address
+    GPSService mGPSService;
+    String address = "";
+    float latitudeN;
+    float longitudeN;
+
     public WeatherFragment() {
         // Required empty public constructor
     }
@@ -81,8 +93,12 @@ public class WeatherFragment extends AbstractWeatherFragment {
         minTemp = (TextView) view.findViewById(R.id.buttom_min_temp);
         weatherDescription = (TextView) view.findViewById(R.id.button_haze);
         enterCity = (EditText) view.findViewById(R.id.entercity);
+        mGPSService = new GPSService(getContext());
+        mGPSService.getLocation();
+        getCurrentLocation();
 
-       // new DownloadTask().execute(test_link);
+
+        // new DownloadTask().execute(test_link);
         // test api call
      /*   weatherDescription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +122,12 @@ public class WeatherFragment extends AbstractWeatherFragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    contact.clear();
-                    weatherArrayList.clear();
+                    if (contact != null) {
+                        contact.clear();
+                        weatherArrayList.clear();
+
+                    }
+
                     urlLink = "http://api.openweathermap.org/data/2.5/forecast?q=" + enterCity.getText().toString() + ",ca&mode=json&appid=" + API_KEY;
                     showSpinner(progressbar);
                     new DownloadTask().execute(urlLink);
@@ -132,6 +152,8 @@ public class WeatherFragment extends AbstractWeatherFragment {
         mThumbIds = new Integer[]{R.drawable.clearbg, R.drawable.background,
                 R.drawable.cloudbg, R.drawable.dayclear, R.drawable.tropical};
         random = new Random();
+
+
         return view;
     }
 
@@ -183,11 +205,11 @@ public class WeatherFragment extends AbstractWeatherFragment {
                 contact.put(weatherObj.getIcon(), icon);
                 contact.put(weatherObj.getDt_txt(), weekdayConverter(dt_txt));
                 contact.put(weatherObj.getTemp(), Double.toString(Math.round(temp_celcius)));
-
+/*
                 entry = contact.entrySet().iterator().next();
                 Log.e(" value ", "2@@@@@@@@@@@@@@@@@@@@@@@ ");
                 Log.e(" value ", " " + contact);
-                Log.e(" value ", "2@@@@@@@@@@@@@@@@@@@@@@@ ");
+                Log.e(" value ", "2@@@@@@@@@@@@@@@@@@@@@@@ ");*/
                 weatherArrayList.add(contact);
             }
             // refactor
@@ -213,6 +235,47 @@ public class WeatherFragment extends AbstractWeatherFragment {
         }
 
         //    contact.clear();
+    }
+
+    private void getCurrentLocation() {
+        if (mGPSService.isLocationAvailable == false) {
+
+            // Here you can ask the user to try again, using return; for that
+            Toast.makeText(getActivity(), "Your location is not available, please try again.", Toast.LENGTH_SHORT).show();
+            return;
+
+            // Or you can continue without getting the location, remove the return; above and uncomment the line given below
+            // address = "Location not available";
+        } else {
+            // Getting location co-ordinates
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(getContext(), Locale.getDefault());
+            latitudeN = (float) mGPSService.getLatitude();
+            longitudeN = (float) mGPSService.getLongitude();
+
+            Log.e("long", " " + longitudeN);
+            Log.e("lat", " " + latitudeN);
+
+
+            try {
+                addresses = geocoder.getFromLocation(latitudeN, longitudeN, 1);
+                Log.e("address", " " + " " + addresses);
+
+                String city = addresses.get(0).getSubLocality();
+                Log.e("city", " " + city);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            //  address = mGPSService.getLocationAddress();
+
+            //  Log.e("Latitude: ", " " + latitudeN + " \nLongitude: " + latitudeN + " " + address);
+
+        }
+
+
     }
 
     private class DownloadTask extends AsyncTask<String, Integer, String> {
