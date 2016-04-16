@@ -45,6 +45,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
     public void onBindViewHolder(PersonViewHolder holder, int position) {
         holder.weekdays.setText(weatherArrayList.get(position).get(weather.getDt_txt()));
         holder.weekdaysTemp.setText(weatherArrayList.get(position).get(weather.getTemp()));
+        holder.time.setText(weatherArrayList.get(position).get(weather.getTime()));
         Picasso.with(this.context).load("http://openweathermap.org/img/w/" + weatherArrayList.get(position).get(weather.getIcon()) + ".png").into(holder.weatherIcom);
     }
 
@@ -64,6 +65,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
         TextView weekdays;
         TextView weekdaysTemp;
         ImageView weatherIcom;
+        TextView time;
 
         PersonViewHolder(View itemView) {
             super(itemView);
@@ -71,6 +73,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.PersonVi
             weekdays = (TextView) itemView.findViewById(R.id.single_id);
             weekdaysTemp = (TextView) itemView.findViewById(R.id.row_temp);
             weatherIcom = (ImageView) itemView.findViewById(R.id.icon_row);
+            time = (TextView) itemView.findViewById(R.id.row_time);
 
         }
 

@@ -14,6 +14,9 @@ public class Weather {
     private String dt_txt = "dt_txt";
 
 
+    private String time = "dt_txt";
+
+
     private static Weather weather = new Weather();
 
     /* A private Constructor prevents any other
@@ -39,6 +42,14 @@ public class Weather {
 
         return temp;
     }
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
 
     public void setTemp(String temp) {
         this.temp = temp;

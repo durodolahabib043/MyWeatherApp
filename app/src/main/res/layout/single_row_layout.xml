@@ -47,6 +47,16 @@
                 android:text="@string/row_temp"
                 android:textColor="@color/colorWhite" />
 
+            <TextView
+                android:id="@+id/row_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/row_temp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/rowtime"
+                android:textColor="@color/colorWhite"
+                android:visibility="gone" />
+
 
         </RelativeLayout>
 

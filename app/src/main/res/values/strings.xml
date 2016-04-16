@@ -10,5 +10,14 @@
     <string name="haze">haze</string>
     <string name="buttom_max_temp">30</string>
     <string name="buttom_min_temp">28</string>
+    <string name="rowtime">rowtime</string>
+
+    <string-array name="backgroundImage">
+        <item>@drawable/clearbg</item>
+        <item>@drawable/cloudbg</item>
+        <item>@drawable/background</item>
+        <item>@drawable/dayclear</item>
+        <item>@drawable/tropical</item>
+    </string-array>
 
 </resources>
